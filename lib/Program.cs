@@ -25,13 +25,6 @@ namespace lib
             }
 
             var bookService = serviceProvider.GetService<IBookService>();
-
-            //var books = await service.GetBooks();
-
-            ////foreach (var book in books)
-            ////{
-            ////    Console.WriteLine(book.Id + " " + book.Title + " " + book.Author + " " + book.Isbn);
-            ////}
         
             new MainMenu(bookService).StartApp();
         }
