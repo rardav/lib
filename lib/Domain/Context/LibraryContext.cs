@@ -31,8 +31,8 @@ namespace lib.Domain.Context
                 new Copy { Id = 5, BookId = 2, Price = 6m, IsBorrowed = false });
 
             modelBuilder.Entity<BorrowTicket>().HasData(
-                new BorrowTicket { Id = 1, BorrowingDate = new DateTime(2023, 9, 1), ClientName = "John John" },
-                new BorrowTicket { Id = 2, BorrowingDate = new DateTime(2022, 9, 18), ClientName = "Jane Jane" });
+                new BorrowTicket { Id = 1, BorrowingDate = new DateTime(2023, 9, 1), ClientName = "John John", CopyId = 1 },
+                new BorrowTicket { Id = 2, BorrowingDate = new DateTime(2022, 9, 18), ClientName = "Jane Jane", CopyId = 2 });
         }
     }
 }

@@ -34,7 +34,7 @@ namespace lib.Application.Services
 
         public async Task PrintBookCopies(string title)
         {
-            var book = await _bookRepository.GetBookWithCopies(title);
+            var book = await _bookRepository.GetBookWithCopiesandTickets(title);
 
             if (book is null || book.Copies.IsNullOrEmpty())
             {
@@ -52,7 +52,7 @@ namespace lib.Application.Services
 
         public async Task LendBook(string title)
         {
-            var book = await _bookRepository.GetBookWithCopies(title);
+            var book = await _bookRepository.GetBookWithCopiesandTickets(title);
 
             if (book is null)
             {
@@ -107,7 +107,7 @@ namespace lib.Application.Services
 
         public async Task ReturnBook(string title)
         {
-            var book = await _bookRepository.GetBookWithCopies(title);
+            var book = await _bookRepository.GetBookWithCopiesandTickets(title);
 
             if (book is null || book.Copies.IsNullOrEmpty())
             {
@@ -121,14 +121,35 @@ namespace lib.Application.Services
 
             var lentCopy = book.Copies
                 .FirstOrDefault(copy => copy.IsBorrowed 
-                    && copy.BorrowTickets.Select(ticket => ticket.ClientName).Contains(clientName));
+                    && copy.BorrowTickets.Select(ticket => ticket.ClientName.ToLower()).Contains(clientName.ToLower()));
 
-            if (lentCopy is null )
+            if (lentCopy is null)
             {
                 Console.WriteLine($"No copy was borrowed by {clientName}\n");
 
                 return;
             }
+
+            lentCopy.IsBorrowed = false;
+            var ticket = lentCopy.BorrowTickets.First(ticket => ticket.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase));
+            ticket.ReturnDate = DateTime.Now;
+            ticket.Tax = CalculateTotalAmountDue(ticket.BorrowingDate, lentCopy.Price);
+
+            await _bookRepository.UpdateBook(book);
+
+            Console.WriteLine($"{book.Title} (copy id: {lentCopy.Id}) was returned by {ticket.ClientName} with a penalty of {ticket.Tax}RON");
+        }
+
+        private decimal CalculateTotalAmountDue(DateTime borrowingDate, decimal price)
+        {
+            var daysOfBorrowing = (DateTime.Now - borrowingDate).TotalDays;
+
+            if (daysOfBorrowing <= 14)
+            {
+                return 0;
+            }
+
+            return 0.01m * price * Convert.ToDecimal(daysOfBorrowing - 14);
         }
     }
 }

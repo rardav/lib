@@ -25,10 +25,11 @@ namespace lib.Application.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Book?> GetBookWithCopies(string title)
+        public async Task<Book?> GetBookWithCopiesandTickets(string title)
         {
             return await _dbContext.Books
                 .Include(book => book.Copies)
+                .ThenInclude(copy => copy.BorrowTickets)
                 .FirstOrDefaultAsync(book => string.Equals(book.Title, title, StringComparison.OrdinalIgnoreCase));
         }
 

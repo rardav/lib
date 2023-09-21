@@ -89,8 +89,8 @@ namespace lib.Application
                         break;
                     case "5":
                         await ReturnBook();
-                        WaitForInputAndClear();
                         _currentAnswer = "0";
+                        WaitForInputAndClear();
                         break;
                     case "6":
                         Environment.Exit(0);

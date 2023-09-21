@@ -6,7 +6,7 @@
         public string ClientName { get; set; }
         public DateTime BorrowingDate { get; set; }
         public DateTime ReturnDate { get; set; }
-        public decimal TotalAmountDue { get; set; }
+        public decimal Tax { get; set; } = 0;
 
         public Copy Copy { get; set; }
     }
