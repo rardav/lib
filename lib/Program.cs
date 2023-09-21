@@ -1,6 +1,8 @@
 ﻿using lib.Application;
 using lib.Application.Repositories;
 using lib.Application.Repositories.Contracts;
+using lib.Application.Services;
+using lib.Application.Services.Contracts;
 using lib.Domain.Context;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +14,7 @@ namespace lib
         {
             var serviceProvider = new ServiceCollection()
                 .AddTransient<IBookRepository, BookRepository>()
+                .AddTransient<IBookService, BookService>()
                 .AddDbContext<LibraryContext>()
                 .BuildServiceProvider();
 
@@ -21,7 +24,7 @@ namespace lib
                 context.Database.EnsureCreated();
             }
 
-            //var service = serviceProvider.GetService<IBookRepository>();
+            var bookService = serviceProvider.GetService<IBookService>();
 
             //var books = await service.GetBooks();
 
@@ -30,7 +33,7 @@ namespace lib
             ////    Console.WriteLine(book.Id + " " + book.Title + " " + book.Author + " " + book.Isbn);
             ////}
         
-            MainMenu.StartApp();
+            new MainMenu(bookService).StartApp();
         }
     }
 }

@@ -22,13 +22,20 @@ namespace lib.Application.Repositories
         public async Task InsertBook(Book book)
         {
             await _dbContext.Books.AddAsync(book);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Book?> GetBookWithCopies(string title)
         {
             return await _dbContext.Books
+                .Include(book => book.Copies)
                 .FirstOrDefaultAsync(book => string.Equals(book.Title, title, StringComparison.OrdinalIgnoreCase));
         }
 
+        public async Task UpdateBook(Book book)
+        {
+            _dbContext.Books.Update(book);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

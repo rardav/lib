@@ -7,6 +7,6 @@
         public bool IsBorrowed { get; set; }
 
         public Book Book { get; set; }
-        public ICollection<BorrowTicket> BorrowTickets { get; set; }
+        public List<BorrowTicket> BorrowTickets { get; set; } = new List<BorrowTicket>();
     }
 }

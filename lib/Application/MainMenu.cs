@@ -1,23 +1,41 @@
-﻿namespace lib.Application
+﻿using lib.Application.Services.Contracts;
+
+namespace lib.Application
 {
-    public static class MainMenu
+    public class MainMenu
     {
-        public static void StartApp()
+        private IBookService _bookService { get; set; }
+
+        public MainMenu(IBookService bookService)
+        {
+            _bookService = bookService;
+        }
+
+        public void StartApp()
         {
             ShowMainMenu();
         }
 
-        private static void Divider()
+        private void Divider()
         {
             Console.WriteLine("\n=============================================================================================\n");
         }
 
-        private static void Clear()
+        private void Clear()
         {
             Console.Clear();
         }
 
-        private static string Read()
+        private void WaitForInputAndClear()
+        {
+            Console.WriteLine("\n\nPress any key to continue...");
+            Console.ReadKey();
+
+            Clear();
+
+        }
+
+        private string Read()
         {
             var answer = Console.ReadLine();
 
@@ -26,7 +44,7 @@
             return answer;
         }
 
-        private static void ShowMainMenu()
+        private async Task ShowMainMenu()
         {
             string _currentAnswer = "0";
             var menuValues = new string[] { "1", "2", "3" , "4", "5"};
@@ -50,32 +68,90 @@
                 switch (_currentAnswer)
                 {
                     case "1":
-                        //AddBook();
+                        await AddBook();
                         _currentAnswer = "0";
+                        WaitForInputAndClear();
                         break;
                     case "2":
-                        //ShowAllBooks();
+                        await _bookService.PrintBooks();
                         _currentAnswer = "0";
+                        WaitForInputAndClear();
                         break;
                     case "3":
-                        //ShowBookCopies();
+                        await ShowBookCopies();
                         _currentAnswer = "0";
+                        WaitForInputAndClear();
                         break;
                     case "4":
-                        //LendBook();
+                        await LendBook();
                         _currentAnswer = "0";
+                        WaitForInputAndClear();
                         break;
                     case "5":
-                        //ReturnBook();
+                        await ReturnBook();
+                        WaitForInputAndClear();
                         _currentAnswer = "0";
                         break;
                     case "6":
                         Environment.Exit(0);
                         break;
-                    default:
-                        break;
                 }
             }
+        }
+
+        private async Task ReturnBook()
+        {
+            Console.Write("Enter a book title: ");
+            var title = Console.ReadLine();
+
+            await _bookService.ReturnBook(title);
+        }
+
+        private async Task LendBook()
+        {
+            Console.Write("Enter a book title: ");
+            var title = Console.ReadLine();
+
+            await _bookService.LendBook(title);
+        }
+
+        private async Task AddBook()
+        {
+            Console.WriteLine("Add book info: ");
+
+            Console.Write("Enter book title: ");
+            var title = Console.ReadLine();
+
+            Console.Write("\nEnter book author: ");
+            var author = Console.ReadLine();
+
+            Console.Write("\nEnter book isbn: ");
+            var isbn = Console.ReadLine();
+
+            decimal price;
+            while (true)
+            {
+                Console.Write("Enter copy price: ");
+                string input = Console.ReadLine();
+
+                if (decimal.TryParse(input, out price))
+                {
+                    break;
+                }
+            }
+
+            await _bookService.CreateBook(title, author, isbn, price);
+
+            Console.Write("\nBook created successfully!\n\n");
+        }
+
+        private async Task ShowBookCopies()
+        {
+            Console.Write("Enter a book title: ");
+            var title = Console.ReadLine();
+            Clear();
+
+            await _bookService.PrintBookCopies(title);
         }
 
     }
