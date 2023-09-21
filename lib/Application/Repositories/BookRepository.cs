@@ -25,7 +25,7 @@ namespace lib.Application.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Book?> GetBookWithCopiesandTickets(string title)
+        public async Task<Book?> GetBookWithCopiesAndTickets(string title)
         {
             return await _dbContext.Books
                 .Include(book => book.Copies)

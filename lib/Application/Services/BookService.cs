@@ -34,7 +34,7 @@ namespace lib.Application.Services
 
         public async Task PrintBookCopies(string title)
         {
-            var book = await _bookRepository.GetBookWithCopiesandTickets(title);
+            var book = await _bookRepository.GetBookWithCopiesAndTickets(title);
 
             if (book is null || book.Copies.IsNullOrEmpty())
             {
@@ -52,7 +52,7 @@ namespace lib.Application.Services
 
         public async Task LendBook(string title)
         {
-            var book = await _bookRepository.GetBookWithCopiesandTickets(title);
+            var book = await _bookRepository.GetBookWithCopiesAndTickets(title);
 
             if (book is null)
             {
@@ -107,7 +107,7 @@ namespace lib.Application.Services
 
         public async Task ReturnBook(string title)
         {
-            var book = await _bookRepository.GetBookWithCopiesandTickets(title);
+            var book = await _bookRepository.GetBookWithCopiesAndTickets(title);
 
             if (book is null || book.Copies.IsNullOrEmpty())
             {
