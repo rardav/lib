@@ -5,5 +5,7 @@ namespace lib.Application.Repositories.Contracts
     public interface IBookRepository
     {
         public Task<List<Book>> GetBooks();
+        public Task InsertBook(Book book);
+
     }
 }

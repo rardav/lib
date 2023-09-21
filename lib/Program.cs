@@ -1,7 +1,7 @@
-﻿using lib.Application.Repositories;
+﻿using lib.Application;
+using lib.Application.Repositories;
 using lib.Application.Repositories.Contracts;
 using lib.Domain.Context;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace lib
@@ -18,19 +18,19 @@ namespace lib
             using (var scope = serviceProvider.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<LibraryContext>();
-                context.Database.EnsureCreated(); // Ensure the database is created and seeded.
+                context.Database.EnsureCreated();
             }
 
-            var service = serviceProvider.GetService<IBookRepository>();
+            //var service = serviceProvider.GetService<IBookRepository>();
 
-            var books = await service.GetBooks();
+            //var books = await service.GetBooks();
 
-            foreach (var book in books)
-            {
-                Console.WriteLine("aa");
-                Console.WriteLine(book.Id + " " + book.Title);
-            }
+            ////foreach (var book in books)
+            ////{
+            ////    Console.WriteLine(book.Id + " " + book.Title + " " + book.Author + " " + book.Isbn);
+            ////}
         
+            MainMenu.StartApp();
         }
     }
 }

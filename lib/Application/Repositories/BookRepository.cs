@@ -18,5 +18,17 @@ namespace lib.Application.Repositories
         {
             return await _dbContext.Books.ToListAsync();
         }
+
+        public async Task InsertBook(Book book)
+        {
+            await _dbContext.Books.AddAsync(book);
+        }
+
+        public async Task<Book?> GetBookWithCopies(string title)
+        {
+            return await _dbContext.Books
+                .FirstOrDefaultAsync(book => string.Equals(book.Title, title, StringComparison.OrdinalIgnoreCase));
+        }
+
     }
 }
